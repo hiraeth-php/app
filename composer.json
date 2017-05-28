@@ -1,0 +1,22 @@
+{
+    "name": "hiraeth/app",
+    "description": "A Nano-Framework for PHP",
+    "license": "MIT",
+    "authors": [
+        {
+            "name":  "Matthew J. Sahagian",
+            "email": "msahagian@dotink.org",
+            "role":  "Lead Architect / Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.0",
+        "imarc/opus": "^1.0.5",
+        "hiraeth/core": "^1.0"
+    },
+    "extra": {
+        "opus": {
+            "enabled": true
+        }
+    }
+}

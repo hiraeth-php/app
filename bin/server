@@ -1,0 +1,29 @@
+<?php
+
+//
+// Track backwards until we discover our composer.json.
+//
+
+for (
+	$root_path  = __DIR__;
+	$root_path != '/' && !is_file($root_path . DIRECTORY_SEPARATOR . 'composer.json');
+	$root_path  = realpath($root_path . DIRECTORY_SEPARATOR . '..')
+);
+
+$loader  = require $root_path . '/vendor/autoload.php';
+$hiraeth = new Hiraeth\Application($root_path, $loader);
+
+exit($hiraeth->run(function() {
+	$cmd = sprintf(
+		'%s -c %s/.user.ini -S %s:%s -t %s',
+		$this->config->get('app', 'server.php', 'php'),
+		$this->config->get('app', 'server.docroot', 'public'),
+		$this->config->get('app', 'server.host', 'localhost'),
+		$this->config->get('app', 'server.port', '8080'),
+		$this->config->get('app', 'server.docroot', 'public')
+	);
+
+	passthru($cmd, $return);
+
+	return $return;
+}));
