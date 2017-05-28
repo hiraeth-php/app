@@ -1,4 +1,4 @@
-# Hireath
+# Hiraeth
 
 > Hiraeth (pronounced [hiraɪ̯θ][1]) is a Welsh word for which there is no direct English translation. The online Welsh-English dictionary of the University of Wales, Lampeter likens it to homesickness tinged with grief or sadness over the lost or departed. -- Wikipedia
 
