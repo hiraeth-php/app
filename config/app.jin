@@ -1,3 +1,12 @@
+[application]
+delegates = [
+
+]
+
+providers = [
+
+]
+
 [server]
 php = php
 host = localhost
