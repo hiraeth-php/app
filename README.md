@@ -91,7 +91,6 @@ namespace Hiraeth\Relay;
 
 use Hiraeth;
 use Relay;
-use Auryn;
 
 /**
  *
@@ -165,10 +164,10 @@ Lastly, let's look at our instantiation:
  * Get the instance of the class for which the delegate operates.
  *
  * @access public
- * @param Auryn\Injector $broker The dependency injector instance
+ * @param Hiraeth\Broker $broker The dependency injector instance
  * @return Relay\Runner The instance of our relay runner
  */
-public function __invoke(Auryn\Injector $broker)
+public function __invoke(Hiraeth\Broker $broker)
 {
 	$queue  = $this->config->get('relay', 'middleware.queue', array());
 	$runner = new Relay\Runner($queue, $this->resolver);
@@ -221,7 +220,6 @@ Using the same principles as before, we come up with the following:
 namespace Hiraeth\Relay;
 
 use Hiraeth;
-use Auryn;
 
 /**
  *
@@ -260,10 +258,10 @@ class ResolverDelegate implements Hiraeth\Delegate
 	 * Get the instance of the class for which the delegate operates.
 	 *
 	 * @access public
-	 * @param Auryn\Injector $broker The dependency injector instance
+	 * @param Hiraeth\Broker $broker The dependency injector instance
 	 * @return Object The instance of the class for which the delegate operates
 	 */
-	public function __invoke(Auryn\Injector $broker)
+	public function __invoke(Hiraeth\Broker $broker)
 	{
 		return new Resolver($broker);
 	}
@@ -307,7 +305,6 @@ Rather than create delegates for every class which might use caching (especially
 namespace Hiraeth\Relay;
 
 use Hiraeth;
-use Auryn;
 
 /**
  *
@@ -355,7 +352,7 @@ class CacheProvider implements Hiraeth\Provider
 	 * @access public
 	 * @return Object The prepared instance
 	 */
-	public function __invoke($cacheable_instance, Aurny\Injector $broker)
+	public function __invoke($cacheable_instance, Hiraeth\Broker $broker)
 	{
 		$cacheable_instance->setCache($this->cache);
 
