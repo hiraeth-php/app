@@ -18,7 +18,9 @@ exit($hiraeth->run(function(Parsedown $parsedown) {
 	<html>
 		<head>
 			<title>Welcome to Hiraeth</title>
-			<link href="modest.css" rel="stylesheet" />
+			<link href="hiraeth.css" rel="stylesheet" />
+			<link href="prism.css" rel="stylesheet" />
+			<script src="prism.js" type="text/javascript"></script>
 		</head>
 		<body>
 			<?= $parsedown->text(file_get_contents($this->getFile('README.md'))) ?>
