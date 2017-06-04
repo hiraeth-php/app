@@ -1,6 +1,6 @@
 # Hiraeth
 
-> Hiraeth (pronounced [hiraɪ̯θ][1]) is a Welsh word for which there is no direct English translation. The online Welsh-English dictionary of the University of Wales, Lampeter likens it to homesickness tinged with grief or sadness over the lost or departed. -- Wikipedia
+> Hiraeth (pronounced [hiraɪ̯θ]) is a Welsh word for which there is no direct English translation. The online Welsh-English dictionary of the University of Wales, Lampeter likens it to homesickness tinged with grief or sadness over the lost or departed. -- Wikipedia
 
 ## A Nano-Framework for PHP
 
@@ -22,9 +22,9 @@ Running the Development Server:
 php bin/server
 ```
 
-If you need to adjust any of the server settings, check out the `config/app.jin` file and look for:
+You can now visit Hiraeth at [http://localhost:8080](http://localhost:8080).  If you need to adjust any of the server settings, check out the `config/app.jin` file and look for:
 
-```ini
+```json
 [server]
 php = php
 host = localhost
@@ -32,9 +32,13 @@ port = 8080
 docroot = public
 ```
 
-You can now edit the `public/index.php` file to suit your needs.  The default file will serve up this README.  To get a better idea of how that works, let's take a look.
+## Hello World!
+
+Let's create a new file in `public/hello.php`.  Begin by placing the following code at the top:
 
 ```php
+<?php
+
 for (
 	$root_path  = __DIR__;
 	$root_path != '/' && !is_file($root_path . DIRECTORY_SEPARATOR . 'composer.json');
@@ -42,245 +46,274 @@ for (
 );
 ```
 
-The first 5 lines of our `index.php` simply tracks backwards until the `composer.json` file is discovered.  This is the "root" of our Hiraeth installation.  From there, we include the composer autoloader and instantiate our application:
+These first 7 lines simply track backwards until the `composer.json` file is discovered.  This is the "root" of our Hiraeth installation which will be contained in the `$root_path` variable.  From there, we include the composer autoloader and instantiate our application:
 
 ```php
 $loader  = require $root_path . '/vendor/autoload.php';
 $hiraeth = new Hiraeth\Application($root_path, $loader);
 ```
 
-Lastly, we execute the application by providing our post-boot logic.  For the default `index.php`, this means getting a markdown parser dependency injected and outputting our markup with the rendered markdown.
+Lastly, we execute the application by providing our post-boot logic:
 
 ```php
-exit($hiraeth->run(function(Parsedown $parsedown) {
-	?>
-	<html>
-		<head>
-			<title>Welcome to Hiraeth</title>
-			<link href="modest.css" rel="stylesheet" />
-		</head>
-		<body>
-			<?= $parsedown->text(file_get_contents($this->getFile('README.md'))) ?>
-		</body>
-	</html>
-	<?php
+exit($hiraeth->run(function() {
+	echo 'Hello World!';
 }));
 ```
 
-The post-boot logic must be in the form of a `Closure`.  As you can see from `$this-getFile('README.md')` we take full advantage of PHP's ability to bind closures to a different scope.  So anything you execute in this callback runs within the scope of the `Hiraeth\Application`.
+Save the file and visit [http://localhost:8080/hello.php](http://localhost:8080/hello.php) to see your message.  _Note: The post-boot logic must be in the form of a `Closure` because it will be bound to the scope of our `Hiraeth\Application`._
 
-## Integration
+## Configuration
 
-Hiraeth provides two interfaces for different types of integrations.  Both of these interfaces are designed to enable you to configure dependencies for your application.
+Configuration files in Hiraeth are [Jsonified Ini Notation](https://github.com/dotink/jin) or "JIN" files.  Put simply, the structure of these files is exactly like an INI file, but the values are fully qualified JSON.  Let's create a test file at `config/text.jin`.
 
-1. Delegates
-2. Providers
+```json
+subject = "World!"
+
+[hello]
+translations = [
+	"Hello",
+	"Hola",
+	"Bonjour",
+	"Ciao"
+]
+```
+
+### Getting Data
+
+Returning to our `public/hello.php` file, we can use our config to make things a bit more interesting:
+
+```php
+exit($hiraeth->run(function() {
+	$subject      = $this->config->get('test', 'subject', 'World!');
+	$translations = $this->config->get('test', 'hello.translations', array());
+
+	foreach ($translations as $translation) {
+		echo $translation . ' ' . $subject . '<br />';
+	}
+}));
+```
+
+The `get()` method on a `Hiraeth\Configuration` takes 3 arguments:
+
+1. The file path (minus the `.jin` extension) relative to the configuration root.
+2. The data path.  Each path element is separated by a `.` in the path string.
+3. A default value in the event that the requisite configuration value is not set.
+
+It is also possible to get data across multiple configuration files by replacing the file path with a `*`:
+
+```php
+exit($hiraeth->run(function() {
+	$subject      = $this->config->get('test', 'subject', 'World!');
+	$translations = $this->config->get('*', 'hello.translations', array());
+
+	foreach ($translations as $path => $values) {
+		foreach ($values as $translation) {
+			echo $translation . ' ' . $subject . '<br />';
+		}
+	}
+}));
+```
+
+_Note: That when retrieving values across multiple configurations, the values are not merged.  Getting from mulitple configurations will always return an array whose keys are the configuration path and whose values are the requested
+data._
+
+## Application
+
+In addition to the `run()` method which bootstraps the system and then executes your post-boot logic, the `Hireath\Application` provides a number of methods for working with the application environment.  For example, you can retrieve environment settings:
+
+```php
+exit($hiraeth->run(function() {
+	echo 'The DEBUG environment setting is set to ' . $this->getEnvironment('DEBUG', 0);
+}));
+```
+
+The `getEnvironment()` method is a simple way to get an environment setting based on name, and if it's not set, to enable the return of a default.  There's no special magic, here.  It's just a wrapper around `getenv()`.  To simplify environment configuration, however, Hiraeth does support the use of a `.env` file.
+
+It is also possible to easily check for files/directories relative to the document root and get their full path:
+
+```php
+exit($hiraeth->run(function() {
+	if ($this->hasFile('README.md')) {
+		echo file_get_contents($this->getFile('README.md'));
+	}
+}));
+```
+
+The above would echo the contents of this file (assuming it's not deleted).  It is also possible to create an empty file and the necessary directory structure, by providing `TRUE` as the second argument to `getFile()`.  If the file does not exist, Hiraeth will attempt to make it.
+
+```php
+exit($hiraeth->run(function() {
+	$cache_path = 'writable/cache/nonexisting/path/mytool.cache';
+
+	if ($this->hasFile($file)) {
+		$data = require $this->getFile($cache_path);
+	} else {
+		$cache = $this->getFile($cache_path, TRUE);
+
+		//
+		// Do work to generated complex $data
+		//
+
+		file_put_contents($cache, $data);
+	}
+
+	//
+	// Use $data
+	//
+}));
+```
+
+Similar to `hasFile()` and `getFile()` methods are the `hasDirectory()` and `getDirectory()` methods.  The only difference being that `getDirectory()` does not require any arguments and if no relative path is supplied it will return the full path of the application directory:
+
+```php
+exit($hiraeth->run(function() {
+	echo 'Hiraeth is installed to ' . $this->getDirectory();
+}));
+```
+
+
+
+
+## Dependency Injection
+
+Dependency injection is an important feature in Hiraeth.  Although it is possible to configure dependency injection directly (`Hiraeth\Broker` is an alias for [the auryn dependency injector](https://github.com/rdlowrey/auryn)), Hiraeth is designed to encapsulate dependency configuration.  There are two forms of encapsulation depending on the complexity in setting up the dependency:
+
+- Hiraeth\Delegate
+- Hiraeth\Provider
+
+
+### Simple Dependencies
+
+For a simple dependency that requires no additional configuration or setup during instantiation, it is possible to inject this without any encapsulation:
+
+```php
+exit($hiraeth->run(function(Parsedown $parsedown) {
+	$parsedown->text(file_get_contents($this->getFile('README.md')));
+}));
+```
+
 
 ### Delegates
 
 Delegates are basically factories for the dependency injector which provide some meta-information about what class is constructed, what interfaces it can serve, and ultimately, an instance to be injected.
 
-If you only rely on concrete classes without any complex instantiation, delegates may not be necessary.  However, the benefit of of using delegates (or providers) is that you can make use of the `Hiraeth\Configuration` to change the behavior.
+Let's create a simple delegate for [monolog](https://github.com/Seldaek/monolog) as an example.  The `Hiraeth\Delegate` interface requires the implementation of 3 methods:
 
-Let's take the `Hiraeth\Relay\RunnerDelegate` as an example.  First, let's define the delegate:
+##### `getClass()`
 
-```php
-<?php
-
-namespace Hiraeth\Relay;
-
-use Hiraeth;
-use Relay;
-
-/**
- *
- */
-class RunnerDelegate implements Hiraeth\Delegate
-{
-	...
-}
-```
-
-First, let's define the class which the delegate is responsible for constructing:
+The `getClass()` method is responsible for returning the class for which the delegate operates.  That is, the class which the delegate is responsible for building.  In our example, this is quite simple:
 
 ```php
-/**
- * Get the class for which the delegate operates.
- *
- * @static
- * @access public
- * @return string The class for which the delegate operates
- */
 static public function getClass()
 {
-	return 'Relay\Runner';
+	return 'Monolog\Logger';
 }
 ```
 
-Next, we'll set any interfaces for which this class provides a concrete implementation:
+##### `getInterfaces()`
+
+If the dependency the delegate is responsible for constructing should be used in an instance where an interface is typehinted, then we can return an array of those interfaces.  In our case, if the broker encounters any dependency for the `Psr\Log\LoggerInterface` interface, we will want it to use this logger.
 
 ```php
-/**
- * Get the interfaces for which the delegate provides a class.
- *
- * @static
- * @access public
- * @return array A list of interfaces for which the delegate provides a class
- */
 static public function getInterfaces()
 {
-	return [];
+	return [
+		'Psr\Log\LoggerInterface'
+	];
 }
 ```
+Note that both `getClass()` and `getInterfaces()` are static methods -- this is so that our delegate can be configured without instantiating any of the additional dependencies it may need to construct the object.
 
-In this case, our `Relay\Runner` does not provide any concrete implementation for interfaces, so we just return an empty array.
+##### `__invoke(Hiraeth\Broker $broker)`
 
-
-From there we can define a constructor with additional dependencies we'll use to configure the `Relay\Runner`:
-
-
-```php
-/**
- * Construct the relay delegate
- *
- * @access public
- * @param Hiraeth\Configuration $config The Hiraeth configuration instance
- * @param Relay\ResolverInterface $resolver A resolver responsible for constructing middleware instances
- * @return void
- */
-public function __construct(Hiraeth\Configuration $config, Relay\ResolverInterface $resolver)
-{
-	$this->config   = $config;
-	$this->resolver = $resolver;
-}
-```
-
-We will use the `Hiraeth\Configuration` to get configuration information and also request an implementation of `Relay\ResolverInterface` to pass to our Runner when we instantiate.
-
-Lastly, let's look at our instantiation:
+Last, but not least is the `__invoke()` method which takes a single argument which is the broker itself and is responsible for building the class:
 
 ```php
-/**
- * Get the instance of the class for which the delegate operates.
- *
- * @access public
- * @param Hiraeth\Broker $broker The dependency injector instance
- * @return Relay\Runner The instance of our relay runner
- */
 public function __invoke(Hiraeth\Broker $broker)
 {
-	$queue  = $this->config->get('relay', 'middleware.queue', array());
-	$runner = new Relay\Runner($queue, $this->resolver);
+	$app      = $broker->make('Hiraeth\Application');
+	$config   = $broker->make('Hiraeth\Config');
+	$handlers = $config->get('monolog', 'handlers', array());
+	$logger   = new Monolog\Logger('app');
 
-	if (in_array('Relay\Middleware\SessionHeadersHandler', $queue)) {
-		ini_set('session.use_cookies', FALSE);
-		ini_set('session.use_only_cookies', TRUE);
-		ini_set('session.use_trans_sid', FALSE);
-		ini_set('session.cache_limiter', '');
+	if (isset($handlers['file'])) {
+		$logger->pushHandler(new Monolog\Handler\RotatingFileHandler(
+			$app->getFile($handlers['file'])
+		));
 	}
 
-	$broker->share($runner);
+	$broker->share($logger);
 
-	return $runner;
+	return $logger;
 }
 ```
 
-Our injector is provided to our `__invoke()` method in the event that we need to build additional dynamic dependencies or, as seen in this case towards the end of the method, share our instance such that future requests for this dependency will return the same instance.
-
-In addition to this, we get our first look at how we use the configuration.  Since we want to make our middlewares more easily configurable, we use a configuration file to get a list of our middleware classes.
-
-In this example, our configuration file will simply be named `relay.jin` (note that the first argument for `$this->config->get()` references the configuration file without the extension). Contained within it, we'll provide our list of middlewares as an array:
-
-```ini
-[middleware]
-queue = [
-	"Relay\\Middleware\\ResponseSender",
-	"Relay\\Middleware\\SessionHeadersHandler"
-]
-```
-
-The final argument to our configuration call is a default value, in the case that the configuration file or the particular section/configuration data cannot be found.
-
-Once the delegate and its configuration is defined, we can register the delegate with our application in the `app.jin` file by adding it to the delegates list.  Alternatively, we can add this information to the same `relay.jin` file since delegates/providers can be registered across any configuration file:
-
-```ini
-[application]
-delegates = [
-	"Hiraeth\\Relay\\RunnerDelegate",
-]
-```
-
-Together, all of this means that when we request a `Relay\Runner` for dependency injection (for the first time), our delegate will be used to construct and configure that instance based on our configuration.
-
-There is a slight problem with this initial implementation, however.  Our delegate requests an instance of the `Relay\ResolverInterface` which our dependency injector doesn't know how to make.  In order to let it know how to make that, we will need to create a delegate for our resolver as well.
-
-Using the same principles as before, we come up with the following:
+In the example above, we use the `$broker` to additional make our share `$app` an `$config` instance.  However, an alternative approach to this is to implement a `__construct()` method which will also be dependency injected.  This has benefits both with regards to testing and also with regards making our dependencies clearer for code helpers and documentation generator:
 
 ```php
-namespace Hiraeth\Relay;
-
-use Hiraeth;
-
-/**
- *
- */
-class ResolverDelegate implements Hiraeth\Delegate
+public function __construct(Hiraeth\Application $app, Hiraeth\Configuration $config)
 {
-	/**
-	 * Get the class for which the delegate operates.
-	 *
-	 * @static
-	 * @access public
-	 * @return string The class for which the delegate operates
-	 */
-	static public function getClass()
-	{
-		return 'Hiraeth\Relay\Resolver';
-	}
-
-
-	/**
-	 * Get the interfaces for which the delegate provides a class.
-	 *
-	 * @static
-	 * @access public
-	 * @return array A list of interfaces for which the delegate provides a class
-	 */
-	static public function getInterfaces()
-	{
-		return [
-			'Relay\ResolverInterface'
-		];
-	}
-
-
-	/**
-	 * Get the instance of the class for which the delegate operates.
-	 *
-	 * @access public
-	 * @param Hiraeth\Broker $broker The dependency injector instance
-	 * @return Object The instance of the class for which the delegate operates
-	 */
-	public function __invoke(Hiraeth\Broker $broker)
-	{
-		return new Resolver($broker);
-	}
+	$this->app    = $app;
+	$this->config = $config;
 }
 ```
 
-Note, that unlike with our runner's delegate, here we make use of the `getInterfaces()` method to say that in cases where a `Relay\ResolverInterface` is required (such as by our runner's delegate), the dependency injector should also use this delegate.
+Now, instead of using the `$broker`, we can rewrite our `__invoke()` to use the contructor injected dependencies.
 
-Lastly, we add the resolver delegate to our configuration as well:
+```php
+public function __invoke(Hiraeth\Broker $broker)
+{
+	$logger   = new Monolog\Logger('app');
+	$handlers = $this->config->get('monolog', 'handlers', array());
 
-```ini
+	if (isset($handlers['file'])) {
+		$logger->pushHandler(new Monolog\Handler\RotatingFileHandler(
+			$this->app->getFile($handlers['file'])
+		));
+	}
+
+	$broker->share($logger);
+
+	return $logger;
+}
+```
+
+The final result can be seen in the `hiraeth/monolog` package in [the LoggerDelegate class](https://github.com/hiraeth-php/monolog/blob/master/src/LoggerDelegate.php).
+
+#### Registering Delegates
+
+In order to register a delegate for use by the system, you will need to add it to a `delegates` list in an `[application]` section of a configuration.  You can create a separate config file so that it can simply be copied to the configuration directory, for example `monolog.jin` or you could add it directly to the `app.jin` list of delegates:
+
+```json
 [application]
 delegates = [
-	"Hiraeth\\Relay\\RunnerDelegate",
-	"Hiraeth\\Relay\\ResolverDelegate"
+	"Hiraeth\\Monolog\\LoggerDelegate"
 ]
 ```
 
-For a complete example of how this all comes together, check out [the `hiraeth/relay` package](https://github.com/hiraeth-php/relay).  This package provides both the delegates seen above, as well as the requisite configuration and supporting files to make use of relay in your application (`.htaccess`, `index.php`).
+In this case, we'll add it to a separate `monolog.jin` file since we also use that file to configure the handlers in our `__invoke` method:
+
+```
+$handlers = $this->config->get('monolog', 'handlers', array());
+```
+
+Right now our delegate only supports a single handler (namely a file handler), so let's make sure we add that information as well:
+
+```json
+[handlers]
+file = writable/logs/app.log
+```
+
+#### Using a Delegate
+
+Once our delegate is created and registered with the system, anywhere we have dependency injection in use, we can get our logger:
+
+```php
+exit($hiraeth->run(function(Psr\Log\LoggerInterface $logger) {
+	$logger->error('You forgot to write an application');
+}));
+```
 
 ## Providers
 
@@ -361,4 +394,4 @@ class CacheProvider implements Hiraeth\Provider
 }
 ```
 
-While providers are extremely useful especially for the injection of commonly used objects, it is important to remember that delegates can also prepare instances in this way before returning them.  Creating an interface and a provider in order to extend a concrete implementation may not be the best option.
+While providers are extremely useful especially for the injection of commonly used objects, it is important to remember that delegates can also prepare instances in this way before returning them.  Creating an interface and a provider in order to extend a concrete implementation may not be the best option
