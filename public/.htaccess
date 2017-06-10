@@ -1,0 +1,38 @@
+################################################################################
+## Forbid reading of certain files directly                                   ##
+################################################################################
+
+<FilesMatch ^\.(.*)>
+	order allow,deny
+	deny from all
+</FilesMatch>
+
+################################################################################
+## Enable Rewrite                                                             ##
+################################################################################
+
+Options -Indexes +FollowSymLinks
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteBase   /
+
+	RewriteCond %{REQUEST_URI} ^.+\.html$
+	RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_URI} !-d
+	RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_URI} -f
+	RewriteRule ^(.+).html$ /$1 [R=301,L]
+
+	RewriteCond %{DOCUMENT_ROOT}/.nostatic !-f
+	RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_URI} !-d
+	RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_URI}.html -f
+	RewriteRule ^(.+)$ /$1.html [L,QSA,END]
+
+	RewriteCond %{DOCUMENT_ROOT}/.nostatic !-f
+	RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_URI} -d
+	RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_URI}/index.html -f
+	RewriteRule ^(.*)$ /$1/index.html [L,QSA,END]
+
+	RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_URI} !-f
+	RewriteRule ^(.*)$ /index.php [L,QSA]
+</IfModule>
