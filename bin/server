@@ -14,16 +14,15 @@ $loader  = require $root_path . '/vendor/autoload.php';
 $hiraeth = new Hiraeth\Application($root_path, $loader);
 
 exit($hiraeth->run(function() {
-	$cmd = sprintf(
-		'%s -c %s/.user.ini -S %s:%s -t %s',
-		$this->config->get('app', 'server.php', 'php'),
-		$this->config->get('app', 'server.docroot', 'public'),
-		$this->config->get('app', 'server.host', 'localhost'),
-		$this->config->get('app', 'server.port', '8080'),
-		$this->config->get('app', 'server.docroot', 'public')
-	);
+	$host    = $this->config->get('app', 'server.host', 'localhost');
+	$port    = $this->config->get('app', 'server.port', '8080');
+	$php_cmd = $this->config->get('app', 'server.php', 'php');
+	$docroot = $this->getDirectory($this->config->get('app', 'server.docroot', 'public'));
 
-	passthru($cmd, $return);
+	passthru(sprintf(
+		'%s -c %s/.user.ini -S %s:%s -t %s %s',
+		$php_cmd, $docroot, $host, $port, $docroot, $docroot . '/.htaccess.php'
+	), $return);
 
 	return $return;
 }));
