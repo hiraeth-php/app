@@ -1,4 +1,5 @@
 .env
+.debug
 vendor
 composer.lock
 opus.map

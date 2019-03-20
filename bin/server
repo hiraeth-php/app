@@ -11,18 +11,17 @@ for (
 );
 
 $loader  = require $root_path . '/vendor/autoload.php';
-$hiraeth = new Hiraeth\Application($root_path, $loader);
+$hiraeth = new Hiraeth\Application($root_path);
 
-exit($hiraeth->run(function() {
-	$host    = $this->config->get('app', 'server.host', 'localhost');
-	$port    = $this->config->get('app', 'server.port', '8080');
-	$php_cmd = $this->config->get('app', 'server.php', 'php');
-	$docroot = $this->getDirectory($this->config->get('app', 'server.docroot', 'public'));
+$hiraeth->run(function() {
+	$host = $this->getEnvironment('SERVER.host', 'localhost');
+	$port = $this->getEnvironment('SERVER.port', '8080');
+	$root = $this->getDirectory($this->getEnvironment('SERVER.root', 'public'));
 
 	passthru(sprintf(
-		'%s -c %s/.user.ini -S %s:%s -t %s %s',
-		$php_cmd, $docroot, $host, $port, $docroot, $docroot . '/.htaccess.php'
+		'%s -c %s/.user.ini -S %s:%s -t %s',
+		$_SERVER['_'], $root->getPathname(), $host, $port, $root->getPathName()
 	), $return);
 
 	return $return;
-}));
+});

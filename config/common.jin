@@ -1,0 +1,20 @@
+[application]
+
+	delegates = [
+
+	]
+
+	providers = [
+
+	]
+
+;
+; Control the basic settings for `bin/server`
+;
+
+[server]
+
+	php = php
+	host = localhost
+	port = 8080
+	docroot = public
