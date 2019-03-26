@@ -2,6 +2,7 @@
     "name": "hiraeth/app",
     "description": "A PHP Nano Framework",
     "license": "MIT",
+    "version": "2.0",
     "authors": [
         {
             "name":  "Matthew J. Sahagian",
