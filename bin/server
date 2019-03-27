@@ -14,9 +14,9 @@ $loader  = require $root_path . '/vendor/autoload.php';
 $hiraeth = new Hiraeth\Application($root_path);
 
 $hiraeth->run(function() {
-	$host = $this->getEnvironment('SERVER.host', 'localhost');
-	$port = $this->getEnvironment('SERVER.port', '8080');
-	$root = $this->getDirectory($this->getEnvironment('SERVER.root', 'public'));
+	$host = $this->getEnvironment('SERVER.HOST', 'localhost');
+	$port = $this->getEnvironment('SERVER.PORT', '8080');
+	$root = $this->getDirectory($this->getEnvironment('SERVER.ROOT', 'public'));
 
 	passthru(sprintf(
 		'%s -c %s/.user.ini -S %s:%s -t %s',
