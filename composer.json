@@ -1,6 +1,8 @@
 {
     "name": "hiraeth/app",
     "description": "A PHP Nano Framework",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "license": "MIT",
     "version": "2.0",
     "authors": [
