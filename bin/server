@@ -13,7 +13,7 @@ for (
 $loader  = require $root_path . '/vendor/autoload.php';
 $hiraeth = new Hiraeth\Application($root_path);
 
-$hiraeth->run(function() {
+$hiraeth->exec(function() {
 	$host = $this->getEnvironment('SERVER.HOST', 'localhost');
 	$port = $this->getEnvironment('SERVER.PORT', '8080');
 	$root = $this->getDirectory($this->getEnvironment('SERVER.ROOT', 'public'));
