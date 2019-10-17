@@ -14,7 +14,7 @@
     ],
     "require": {
         "php": ">=7.2",
-        "imarc/opus": "^1.0.5",
+        "imarc/opus": "^1.1",
         "hiraeth/core": "^2.0"
     },
     "autoload": {
