@@ -1,5 +1,4 @@
 .env
-.debug
 vendor
 storage
 opus.map
