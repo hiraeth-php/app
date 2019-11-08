@@ -16,11 +16,12 @@ $hiraeth = new Hiraeth\Application($root_path);
 $hiraeth->exec(function() {
 	$host = $this->getEnvironment('SERVER.HOST', 'localhost');
 	$port = $this->getEnvironment('SERVER.PORT', '8080');
-	$root = $this->getDirectory($this->getEnvironment('SERVER.ROOT', 'public'));
+	$root = $this->getEnvironment('SERVER.ROOT', 'public'); 
+	$root = $this->getDirectory($root)->getRealPath();
 
 	passthru(sprintf(
-		'%s -c %s/.user.ini -S %s:%s -t %s',
-		$_SERVER['_'], $root->getPathname(), $host, $port, $root->getPathName()
+		'%s -c %s/.user.ini -S %s:%s -t %s %s/index.php',
+		$_SERVER['_'], $root, $host, $port, $root, $root
 	), $return);
 
 	return $return;
