@@ -12,9 +12,8 @@
 
 	;
 	; Delegates are mini-factories for the dependency injector.  They provide all the information
-	; required to register with dependency injector as being capable of building a particular class
-	; and contain all the requisite logic for building that class, including any configuration
-	; settings logic.
+	; required to register with the dependency injector as being capable of building a particular
+	; class and contain all the requisite logic for building that class.
 	;
 
 	delegates = [
@@ -22,11 +21,8 @@
 	]
 
 	;
-	; Providers can be thought of as hooks which receive an object instance of a particular
-	; interface once it has been created by the dependecy injector.  From here, it can call the
-	; methods assured in that interface to conitnue configuring or setting up the instances.  Like
-	; delegates, providers contain all the requisite information inside the class, so they merely
-	; need to be registered.
+	; Providers are post-instantiation hooks.  Objects which implement their target interfaces will
+	; be passed to them for additional setter injection or post-instantiation configuration.
 	;
 
 	providers = [
