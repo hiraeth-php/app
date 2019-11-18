@@ -23,6 +23,11 @@
             "" : "local/"
         }
     },
+    "config": {
+        "platform": {
+            "php": "7.2.0"
+        }
+    },
     "extra": {
         "opus": {
             "enabled": true
