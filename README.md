@@ -16,4 +16,4 @@ All functionality beyond these is provided by separate packages which bridge thi
 
 ## Interested?
 
-[Read the documentation to get started.](https://hiraeth.dev/docs/)
+[Read the documentation to get started.](https://hiraeth.dev/)
