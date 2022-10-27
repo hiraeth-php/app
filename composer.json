@@ -12,20 +12,23 @@
             "role":  "Lead Architect / Developer"
         }
     ],
-    "require": {
-        "php": ">=7.2",
-        "imarc/opus": "^1.1",
-        "hiraeth/core": "^2.0"
-    },
     "autoload": {
         "classmap": ["local/"],
         "psr-0": {
             "" : "local/"
         }
     },
+    "require": {
+        "php": ">=7.2",
+        "imarc/opus": "^1.1",
+        "hiraeth/core": "^2.0"
+    },
     "config": {
         "platform": {
             "php": "7.2.0"
+        },
+        "allow-plugins": {
+            "imarc/opus": true
         }
     },
     "extra": {
