@@ -1,0 +1,30 @@
+[application]
+
+	;
+	; Aliases enable you to inform the dependency injector which concrete class should be built
+	; to provide for a type-hinted interface.  If the interface does not exist, a built in php
+	; class alias will be generated as an alias for the class.
+	;
+
+	aliases = {
+		"Psr\Container\ContainerInterface": "Hiraeth\Broker"
+	}
+
+	;
+	; Delegates are mini-factories for the dependency injector.  They provide all the information
+	; required to register with the dependency injector as being capable of building a particular
+	; class and contain all the requisite logic for building that class.
+	;
+
+	delegates = [
+
+	]
+
+	;
+	; Providers are post-instantiation hooks.  Objects which implement their target interfaces will
+	; be passed to them for additional setter injection or post-instantiation configuration.
+	;
+
+	providers = [
+
+	]
