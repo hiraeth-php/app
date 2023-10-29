@@ -1,6 +1,6 @@
 {
     "name": "hiraeth/app",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "description": "A PHP Nano Framework",
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -15,7 +15,7 @@
     "require": {
         "php": ">=7.2",
         "imarc/opus": "^1.1",
-        "hiraeth/core": "^2.0"
+        "hiraeth/core": "^3.0"
     },
     "autoload": {
         "classmap": ["local/"],
@@ -25,7 +25,7 @@
     },
     "config": {
         "platform": {
-            "php": "7.2.0"
+            "php": "8.2.0"
         },
         "allow-plugins": {
             "imarc/opus": true
