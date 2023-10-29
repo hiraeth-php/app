@@ -13,7 +13,6 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
         "imarc/opus": "^1.1",
         "hiraeth/core": "^3.0"
     },
