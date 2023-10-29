@@ -1,6 +1,5 @@
 {
     "name": "hiraeth/app",
-    "version": "3.0.0",
     "description": "A PHP Nano Framework",
     "minimum-stability": "dev",
     "prefer-stable": true,
