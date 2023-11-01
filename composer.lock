@@ -128,16 +128,16 @@
         },
         {
             "name": "dotink/jin",
-            "version": "4.7.0",
+            "version": "4.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dotink/jin.git",
-                "reference": "3d7d52d009c064c5c9651ddf60a958b6b4ec0ee6"
+                "reference": "6526232bed0e65eb269477f2dc76c6761961a017"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dotink/jin/zipball/3d7d52d009c064c5c9651ddf60a958b6b4ec0ee6",
-                "reference": "3d7d52d009c064c5c9651ddf60a958b6b4ec0ee6",
+                "url": "https://api.github.com/repos/dotink/jin/zipball/6526232bed0e65eb269477f2dc76c6761961a017",
+                "reference": "6526232bed0e65eb269477f2dc76c6761961a017",
                 "shasum": ""
             },
             "require": {
@@ -172,9 +172,9 @@
             ],
             "support": {
                 "issues": "https://github.com/dotink/jin/issues",
-                "source": "https://github.com/dotink/jin/tree/4.7.0"
+                "source": "https://github.com/dotink/jin/tree/4.8.0"
             },
-            "time": "2023-10-13T04:49:01+00:00"
+            "time": "2023-10-31T04:30:34+00:00"
         },
         {
             "name": "dotink/slashtrace",
@@ -232,12 +232,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/hiraeth-php/core.git",
-                "reference": "0cc131e32aa050beacbf1c58e8666c88c9dc4b64"
+                "reference": "1f5f2b86b6f29788eab186830503c24fb90751c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hiraeth-php/core/zipball/0cc131e32aa050beacbf1c58e8666c88c9dc4b64",
-                "reference": "0cc131e32aa050beacbf1c58e8666c88c9dc4b64",
+                "url": "https://api.github.com/repos/hiraeth-php/core/zipball/1f5f2b86b6f29788eab186830503c24fb90751c8",
+                "reference": "1f5f2b86b6f29788eab186830503c24fb90751c8",
                 "shasum": ""
             },
             "require": {
@@ -282,7 +282,7 @@
                 "issues": "https://github.com/hiraeth-php/core/issues",
                 "source": "https://github.com/hiraeth-php/core/tree/3.0-beta"
             },
-            "time": "2023-10-30T03:14:13+00:00"
+            "time": "2023-10-31T04:34:26+00:00"
         },
         {
             "name": "imarc/opus",
