@@ -13,7 +13,7 @@
         }
     ],
     "require": {
-        "imarc/opus": "^1.0",
+        "imarc/opus": "^2.0",
         "hiraeth/core": "^3.0"
     },
     "autoload": {
