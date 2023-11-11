@@ -290,12 +290,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/imarc/opus.git",
-                "reference": "accce82336043d5e7a142afb5edb9acca54df139"
+                "reference": "d722a193f5e2b1f1131088d02201de100b9bcf80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/imarc/opus/zipball/accce82336043d5e7a142afb5edb9acca54df139",
-                "reference": "accce82336043d5e7a142afb5edb9acca54df139",
+                "url": "https://api.github.com/repos/imarc/opus/zipball/d722a193f5e2b1f1131088d02201de100b9bcf80",
+                "reference": "d722a193f5e2b1f1131088d02201de100b9bcf80",
                 "shasum": ""
             },
             "require": {
@@ -336,7 +336,7 @@
                 "issues": "https://github.com/imarc/opus/issues",
                 "source": "https://github.com/imarc/opus/tree/2.0-beta"
             },
-            "time": "2023-11-11T00:45:18+00:00"
+            "time": "2023-11-11T01:10:59+00:00"
         },
         {
             "name": "jfcherng/php-color-output",
