@@ -1,5 +1,6 @@
 {
     "name": "hiraeth/app",
+    "version": "1.0",
     "description": "A Nano-Framework for PHP",
     "license": "MIT",
     "authors": [
