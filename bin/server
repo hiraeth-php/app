@@ -14,9 +14,9 @@ $loader  = require $root_path . '/vendor/autoload.php';
 $hiraeth = new Hiraeth\Application($root_path);
 
 $hiraeth->exec(function() {
-	$host = $this->getEnvironment('SERVER.HOST', 'localhost');
-	$port = $this->getEnvironment('SERVER.PORT', '8080');
-	$root = $this->getEnvironment('SERVER.ROOT', 'public');
+	$host = $this->getEnvironment('SERVER_HOST', 'localhost');
+	$port = $this->getEnvironment('SERVER_PORT', '8080');
+	$root = $this->getEnvironment('SERVER_ROOT', 'public');
 
 	chdir($this->getDirectory($root)->getRealPath());
 
