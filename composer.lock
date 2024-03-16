@@ -232,12 +232,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/hiraeth-php/core.git",
-                "reference": "d33056e07ebf176a6b4c578400228585d9c4e1ca"
+                "reference": "f439b549a4f13a5e7dc0618d0a6af6216c889cd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hiraeth-php/core/zipball/d33056e07ebf176a6b4c578400228585d9c4e1ca",
-                "reference": "d33056e07ebf176a6b4c578400228585d9c4e1ca",
+                "url": "https://api.github.com/repos/hiraeth-php/core/zipball/f439b549a4f13a5e7dc0618d0a6af6216c889cd9",
+                "reference": "f439b549a4f13a5e7dc0618d0a6af6216c889cd9",
                 "shasum": ""
             },
             "require": {
@@ -282,7 +282,7 @@
                 "issues": "https://github.com/hiraeth-php/core/issues",
                 "source": "https://github.com/hiraeth-php/core/tree/3.0-beta"
             },
-            "time": "2023-11-16T21:37:36+00:00"
+            "time": "2024-03-15T23:27:36+00:00"
         },
         {
             "name": "imarc/opus",
