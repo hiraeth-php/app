@@ -13,6 +13,7 @@
         }
     ],
     "require": {
+        "php": "^8.2",
         "imarc/opus": "^2.0",
         "hiraeth/core": "^3.0"
     },
@@ -23,9 +24,6 @@
         }
     },
     "config": {
-        "platform": {
-            "php": "8.2.0"
-        },
         "allow-plugins": {
             "imarc/opus": true
         }
